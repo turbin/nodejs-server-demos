@@ -31,8 +31,11 @@ if(cluster.isMaster) {
     console.log(`I am worker #${cluster.worker.id}` + ' listen on 8000');
     
     http.Server(function(req, res){
-        //this callback function will be executed twince?
-        console.log(`I am worker #${cluster.worker.id}` + 'executed!');
+        //FIXME: this callback function will be executed twice?
+        /* due to chrome will send the requests in twice. 
+           one for url index page,another for favicon.ico that file is the icon file showed in browser. */
+        var request = `req.url=${req.url}, req.rawHeaders=${req.rawHeaders}`;
+        console.log(`I am worker #${cluster.worker.id} recievied ${request}`);
         res.writeHead(200);
         res.end("hello world \n");
     }).listen(8000);
